@@ -46,23 +46,20 @@ namespace ComDll
         public void DoSomething(string somethingToDo)
         {
             _aDeed = somethingToDo;
-            if(null != SomethingWasDone)
+            if (null != SomethingWasDone)
             {
                 SomethingWasDone.Invoke(_aDeed);
             }
 
             // Try sending an array.
-            ParamArray paramArray = new ParamArray()
+            var paramArray = new ParamStruct[]
             {
-                Params = new ParamStruct[]
-                {
-                    new ParamStruct() { Key = "Key1", Value = "Value1" },
-                    new ParamStruct() { Key = "Key2", Value = "Value2" }
-                }
+                new ParamStruct() { Key = "Key1", Value = "Value1" },
+                new ParamStruct() { Key = "Key2", Value = "Value2" }
             };
-            if(null != ParamsWereSent)
+            if (null != ParamsWereSent)
             {
-                ParamsWereSent.Invoke(paramArray.Params, paramArray.Params.Length);
+                ParamsWereSent.Invoke(paramArray, paramArray.Length);
             }
         }
 
@@ -80,7 +77,10 @@ namespace ComDll
         public event SomethingDoneHandler SomethingWasDone;
 
         [ComVisible(false)]
-        public delegate void ParamsWereSentHandler(ParamStruct[] paramArray, int count);
+        public delegate void ParamsWereSentHandler(
+            [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ParamStructArrayMarshaler))]
+            ParamStruct[] paramArray,
+            int count);
         public event ParamsWereSentHandler ParamsWereSent;
 
     }

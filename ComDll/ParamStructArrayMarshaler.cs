@@ -19,6 +19,45 @@ namespace ComDll
             return _marshaler;
         }
 
+        // Try the easy way.
+        public object MarshalNativeToManaged(IntPtr pNativeData)
+        {
+            ParamStruct[] array = null;
+            if(IntPtr.Zero != pNativeData)
+            {
+            }
+            return array;
+        }
+
+        // Here, we'll need to stuff the managed object into native memory.
+        // The string will be the hard part because it has to go after the array, and the array elements
+        // will need to point to them.
+        public IntPtr MarshalManagedToNative(object ManagedObj)
+        {
+            IntPtr ret = IntPtr.Zero;
+            if (null != ManagedObj)
+            {
+                ParamStruct[] array = ManagedObj as ParamStruct[];
+                if (array.Length > 0)
+                {
+                    int elementSize = Marshal.SizeOf<ParamStruct>();
+                    int size = 0;
+                    foreach (var item in array)
+                    {
+                        size += GetStructLength(item);
+                    }
+                    ret = Marshal.AllocHGlobal(size);
+                    Marshal.WriteInt32(ret, array.Length);
+                    int stringOffset = elementSize * array.Length;
+                    foreach (var item in array)
+                    {
+                        Marshal.StructureToPtr()
+                    }
+                }
+            }
+            return ret;
+        }
+        /*
         // This should be the easy part. We're pulling the array from native to managed.
         public object MarshalNativeToManaged(IntPtr pNativeData)
         {
@@ -30,6 +69,7 @@ namespace ComDll
                 int elementSize = Marshal.SizeOf<ParamStruct>();
                 for(int i = 0; i < length; ++i)
                 {
+                    // I'm sure that I'll have to deal with the strings, but I'll do that later.
                     array[i] = Marshal.PtrToStructure<ParamStruct>(pNativeData + sizeof(int) + (elementSize * i));
                 }
             }
@@ -55,10 +95,16 @@ namespace ComDll
                     }
                     ret = Marshal.AllocHGlobal(size);
                     Marshal.WriteInt32(ret, array.Length);
+                    int stringOffset = elementSize * array.Length;
+                    foreach(var item in array)
+                    {
+                        Marshal.StructureToPtr
+                    }
                 }
             }
             return ret;
         }
+        */
 
         private int GetStructLength(ParamStruct item)
         {

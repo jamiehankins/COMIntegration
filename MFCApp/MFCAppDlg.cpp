@@ -97,14 +97,6 @@ BOOL CMFCAppDlg::OnInitDialog()
         OnCancel();
     }
 
-    // Let's try sending something.
-    //ParamArray paramArray;
-    //CComSafeArray<ParamStruct> saParams(2);
-    for (int i = 0; i < 1000000; ++i)
-    {
-        m_ptr->DoSomething("This is the day that we consider whether we are worthy of being cast into this great world of things that we look at . Afterall, what is life but a chance to make good on the promises of tomorrow and give all we can to correct the mistakes of yesterday for the ones that came before.");
-    }
-
     return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
