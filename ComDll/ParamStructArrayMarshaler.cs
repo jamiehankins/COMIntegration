@@ -51,7 +51,7 @@ namespace ComDll
                     int stringOffset = elementSize * array.Length;
                     foreach (var item in array)
                     {
-                        Marshal.StructureToPtr()
+                        //Marshal.StructureToPtr()
                     }
                 }
             }
