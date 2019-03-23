@@ -97,6 +97,8 @@ BOOL CMFCAppDlg::OnInitDialog()
         OnCancel();
     }
 
+    m_ptr->DoSomething("Try this");
+
     return TRUE;  // return TRUE  unless you set the focus to a control
 }
 

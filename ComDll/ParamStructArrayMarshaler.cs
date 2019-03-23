@@ -48,10 +48,22 @@ namespace ComDll
                     }
                     ret = Marshal.AllocHGlobal(size);
                     Marshal.WriteInt32(ret, array.Length);
-                    int stringOffset = elementSize * array.Length;
+                    IntPtr objectLocation = ret + sizeof(int);
+                    IntPtr stringLocation = IntPtr.Add(objectLocation, elementSize * array.Length);
                     foreach (var item in array)
                     {
-                        //Marshal.StructureToPtr()
+                        // First, lay down the structure.
+                        Marshal.StructureToPtr(item, objectLocation, false);
+                        // Next, write Key.
+                        Marshal.StructureToPtr(item.Key, stringLocation, false);
+                        // Fix pointer.
+                        Marshal.WriteIntPtr(objectLocation, Marshal.OffsetOf(typeof(ParamStruct), "Key").ToInt32(), stringLocation);
+                        stringLocation += Marshal.SizeOf(item.Key);
+                        // Next, write Value.
+                        Marshal.StructureToPtr(item.Value, stringLocation, false);
+                        // Fix pointer.
+                        Marshal.WriteIntPtr(objectLocation, Marshal.OffsetOf(typeof(ParamStruct), "Key").ToInt32(), stringLocation);
+                        stringLocation += Marshal.SizeOf(item.Value);
                     }
                 }
             }
